@@ -10,13 +10,25 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Button } from 'components/Button/Button';
 import { Loader } from 'components/Loader/Loader';
 import { Modal } from 'components/Modal/Modal';
-import { feachPhotos } from 'components/feach-photo';
 // import { feachPhotos } from 'components/feach-photo';
 
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
+var lightbox = new SimpleLightbox('.gallery a', {
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
 
 // axios.defaults.baseURL = 'https://pixabay.com/api/';
+const INITIAL_STATE = {
+  photos: [],
+  searchPhotos: '',
+  page: 1,
+  per_page: 12,
+  isLoading: false,
+  error: null,
+};
 
 export default class ImageFinder extends Component {
   static propTypes = {};
@@ -26,8 +38,13 @@ export default class ImageFinder extends Component {
     searchPhotos: '',
     page: 1,
     per_page: 12,
-    isLoading: true,
+    isLoading: false,
+    error: null,
   };
+
+  // async componentDidMount() {
+  //   this.setState({ isLoading: true });
+  // }
 
   handleChange = evt => {
     this.setState({ searchPhotos: evt.currentTarget.value.toLowerCase() });
@@ -39,26 +56,41 @@ export default class ImageFinder extends Component {
     const { searchPhotos } = this.state;
 
     if (searchPhotos.trim() === '') {
-      Notify.failure('Input search name...');
+      Notify.info('Input search name please ...');
       return;
     }
     this.props.onSubmit({ ...this.state });
     console.log('handleSubmit... searchPhotos, ', searchPhotos);
-    // feachPhotos({ searchPhotos });
-    this.setState({ searchPhotos: '' });
+    this.feachPhotos({ searchPhotos });
+    // this.setState({ searchPhotos: '' });
+    this.setState({ ...INITIAL_STATE });
   };
 
   // reset = () => {
   //   this.setState({ searchPhotos: '' });
   // };
 
-  async componentDidMount() {
+  // async componentDidMount() {
+  //   const { searchPhotos, photos, page, per_page } = this.state;
+  //   const BASE_URL = 'https://pixabay.com/api/';
+  //   const API_KEY = '29782836-0cb6e5c5167e525a8102df66c';
+  //   const url = `${BASE_URL}?key=${API_KEY}&q=${searchPhotos}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${per_page}`;
+  //   const response = await axios.get(url);
+  //   console.log('componentDidMount... response.data.hits, ', response);
+  //   this.setState({ photos: response.data.hits });
+  // }
+
+  async feachPhotos() {
     const { searchPhotos, photos, page, per_page } = this.state;
     const BASE_URL = 'https://pixabay.com/api/';
     const API_KEY = '29782836-0cb6e5c5167e525a8102df66c';
     const url = `${BASE_URL}?key=${API_KEY}&q=${searchPhotos}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${per_page}`;
     const response = await axios.get(url);
-    console.log('componentDidMount... response.data.hits, ', response);
+    console.log('feachPhotos... response.data.hits, ', response);
+    if (response.status !== 200) {
+      throw new Error(response.status);
+      Notify.failure(Error);
+    }
     this.setState({ photos: response.data.hits });
   }
 
