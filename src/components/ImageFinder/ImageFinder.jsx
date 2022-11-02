@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import ProtoTypes from 'prop-types';
 import { Notify } from 'notiflix';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import Select from 'react-select';
+
+// import SimpleLightbox from 'simplelightbox';
+// import 'simplelightbox/dist/simple-lightbox.min.css';
 
 // import { nanoid } from 'nanoid';
 import { Searchbar } from 'components/Searchbar/Searchbar';
@@ -10,25 +17,11 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Button } from 'components/Button/Button';
 import { Loader } from 'components/Loader/Loader';
 import { Modal } from 'components/Modal/Modal';
-// import { feachPhotos } from 'components/feach-photo';
 
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-
-var lightbox = new SimpleLightbox('.gallery a', {
-  captionPosition: 'bottom',
-  captionDelay: 250,
-});
-
-// axios.defaults.baseURL = 'https://pixabay.com/api/';
-const INITIAL_STATE = {
-  photos: [],
-  searchPhotos: '',
-  page: 1,
-  per_page: 12,
-  isLoading: false,
-  error: null,
-};
+// var lightbox = new SimpleLightbox('.gallery a', {
+//   captionPosition: 'bottom',
+//   captionDelay: 250,
+// });
 
 export default class ImageFinder extends Component {
   static propTypes = {};
@@ -38,32 +31,43 @@ export default class ImageFinder extends Component {
     searchPhotos: '',
     page: 1,
     per_page: 12,
+    images: 0,
     isLoading: false,
     error: null,
+    showModal: false,
+    largeImageURL: '',
+    tags: '',
+    isActiveBtnLoadMore: false,
   };
 
-  // async componentDidMount() {
-  //   this.setState({ isLoading: true });
-  // }
+  // notify = () => toast('Input search name please ...');
 
   handleChange = evt => {
     this.setState({ searchPhotos: evt.currentTarget.value.toLowerCase() });
-    console.log('handleChange... evt.target.value, ', evt.target.value);
   };
 
   handleSubmit = evt => {
+    const { searchPhotos, photos, page, per_page } = this.state;
     evt.preventDefault();
-    const { searchPhotos } = this.state;
 
     if (searchPhotos.trim() === '') {
-      Notify.info('Input search name please ...');
-      return;
+      return toast.info('Input search name please ...');
     }
-    this.props.onSubmit({ ...this.state });
-    console.log('handleSubmit... searchPhotos, ', searchPhotos);
-    this.feachPhotos({ searchPhotos });
-    // this.setState({ searchPhotos: '' });
-    this.setState({ ...INITIAL_STATE });
+    // this.props.onSubmit({ ...this.state });
+    this.props.onSubmit(this.state.searchPhotos);
+    console.log('handleSubmit... searchPhotos, ', this.state.searchPhotos);
+    try {
+      this.feachPhotos();
+    } catch (error) {
+      toast.error(error);
+      // Notify.failure(error);
+    }
+    this.reset({ photos, page, per_page });
+    this.setState({ searchPhotos: '' });
+  };
+
+  reset = () => {
+    this.setState({ photos: [], page: 1, per_page: 12 });
   };
 
   // reset = () => {
@@ -80,6 +84,22 @@ export default class ImageFinder extends Component {
   //   this.setState({ photos: response.data.hits });
   // }
 
+  // async componentDidUpdate() {
+  //   try {
+  //     // this.feachPhotos({ searchPhotos, page, per_page });
+  //     this.feachPhotos();
+  //     // images = Math.ceil((page * per_page) / result.totalHits);
+  //     // images = (page * per_page) / result.totalHits;
+  //     // if (images >= 1) {
+  //     //   Notify.info(
+  //     //     "We're sorry, but you've reached the end of search results."
+  //     //   );
+  //     // }
+  //   } catch (error) {
+  //     Notify.failure(error);
+  //   }
+  // }
+
   async feachPhotos() {
     const { searchPhotos, photos, page, per_page } = this.state;
     const BASE_URL = 'https://pixabay.com/api/';
@@ -89,15 +109,78 @@ export default class ImageFinder extends Component {
     console.log('feachPhotos... response.data.hits, ', response);
     if (response.status !== 200) {
       throw new Error(response.status);
-      Notify.failure(Error);
+      // Notify.failure(Error);
+      toast.error(Error);
     }
     this.setState({ photos: response.data.hits });
+  }
+
+  onPagination = evt => {
+    const { searchPhotos, photos, page, per_page } = this.state;
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+    // this.setState(prevState => ({ per_page: prevState.per_page + 12 }));
+    // this.setState(prevState => ({ photos: [...prevState.photos], photos }));
+
+    try {
+      // this.feachPhotos({ searchPhotos, page, per_page });
+      this.feachPhotos();
+      // images = Math.ceil((page * per_page) / result.totalHits);
+      // images = (page * per_page) / result.totalHits;
+      // if (images >= 1) {
+      //   Notify.info(
+      //     "We're sorry, but you've reached the end of search results."
+      //   );
+      // }
+    } catch (error) {
+      toast.error(error);
+      // Notify.failure(error);
+    }
+    // return;
+  };
+
+  onToggelModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
+
+  openModal = (evt, url, alt) => {
+    evt.preventDefault();
+    console.log('openModal...');
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+      // largeImageURL: largeImageURL,
+      // tags: tags,
+    }));
+  };
+
+  onOpenModal = evt => {
+    const currentImgUrl = evt.target.dataset.large;
+    const currentImgDescription = evt.targe.alt;
+
+    if (evt.target.nodeName === 'IMG') {
+      this.setState(({ showModal }) => ({
+        showModal: !showModal,
+        currentImgUrl: currentImgUrl,
+        currentImgDescription: currentImgDescription,
+      }));
+    }
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.props.searchPhotos !== this.props.searchPhotos) {
+      console.log(
+        'prevProps.props.searchPhotos, ',
+        prevProps.props.searchPhotos
+      );
+      console.log('this.props.searchPhotos, ', this.props.searchPhotos);
+    }
   }
 
   render() {
     // const { searchPhotos, photoes } = this.state;
     // const { handleChange, handleSubmit } = this;
-    console.log('render ... photos, ', this.state.photos);
+    console.log('render ... this.state, ', this.state);
     return (
       <div>
         {/* <Searchbar onSubmit={handleSubmit} onChange={handleChange} /> */}
@@ -118,7 +201,6 @@ export default class ImageFinder extends Component {
             />
           </form>
         </header>
-
         {/* {photos.length > 0 ? <ImageGallery photos={photos} /> : null} */}
         <ul class="gallery">
           {this.state.photos.map(photo => (
@@ -130,15 +212,34 @@ export default class ImageFinder extends Component {
                   alt={photo.tags}
                   title={photo.tags}
                   loading="lazy"
+                  onClick={() => {
+                    this.openModal(photo.largeImageURL, photo.tags);
+                  }}
                 />
               </a>
             </li>
           ))}
         </ul>
         {/* <ImageGalleryItem /> */}
-        <Button />
-        <Loader />
-        <Modal />
+        {/* <Button onClick={this.onPagination} page={this.state.page} /> */}
+        <button
+          type="button"
+          onClick={() => {
+            this.onPagination();
+            console.log(
+              'click button load more..., onPagination..., page #',
+              this.state.page
+            );
+          }}
+        >
+          Load more
+        </button>
+        <Loader />;{/* <Modal /> */}
+        <div class="overlay">
+          <div class="modal">
+            <img src="" alt="" />
+          </div>
+        </div>
       </div>
     );
   }

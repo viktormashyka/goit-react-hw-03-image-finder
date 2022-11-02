@@ -1,3 +1,21 @@
+import { MagnifyingGlass } from 'react-loader-spinner';
+// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+
 export const Loader = () => {
-  return console.log('loader ...');
+  console.log('loading...');
+  return (
+    (<p>Loading...</p>),
+    (
+      <MagnifyingGlass
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="MagnifyingGlass-loading"
+        wrapperStyle={{}}
+        wrapperClass="MagnifyingGlass-wrapper"
+        glassColor="#c0efff"
+        color="#e15b64"
+      />
+    )
+  );
 };
