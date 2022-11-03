@@ -3,7 +3,7 @@ import ProtoTypes from 'prop-types';
 import { Notify } from 'notiflix';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 
 import Select from 'react-select';
 

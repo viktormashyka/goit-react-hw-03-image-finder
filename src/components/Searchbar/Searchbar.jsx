@@ -10,12 +10,8 @@ export class Searchbar extends Component {
     page: 1,
     // per_page: 12,
     // images: 0,
-    // isLoading: false,
-    // error: null,
-    // showModal: false,
     // largeImageURL: '',
     // tags: '',
-    // isActiveBtnLoadMore: false,
   };
 
   handleChange = evt => {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
-import * as basicLightbox from 'basiclightbox';
+// import * as basicLightbox from 'basiclightbox';
 
 import { fetchPhotos } from 'api';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
@@ -30,6 +30,9 @@ export class ImageGallery extends Component {
   state = {
     photos: [],
     isLoading: false,
+    showModal: false,
+    url: '',
+    alt: '',
   };
 
   //   async componentDidMount() {
@@ -89,42 +92,44 @@ export class ImageGallery extends Component {
     }
   }
 
-  //   openModal(evt, { url, tags }) {
-  //     evt.prevetDefault();
-  //     console.log('openModal...');
-  //     const instance = basicLightbox.create(`
-  //     <div class="overlay">
-  //       <div class="modal">
-  //         Modalka...
-  //         <img src={url} alt={tags} />
-  //       </div>
-  //     </div>
-  // `);
-  //   }
+  toggleModal = (evt, { largeImageURL, tags }) => {
+    evt.preventDefault();
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+    console.log('toggleModal...');
+    this.openModal(evt, { largeImageURL, tags });
+  };
+
+  openModal = (evt, { largeImageURL, tags }) => {
+    if (evt.target === 'IMG') {
+      this.setState(({ largeImageURL, tags }) => ({
+        url: largeImageURL,
+        alt: tags,
+      }));
+    }
+    console.log('largeImageURL, tags', this.state.url, this.state.alt);
+  };
 
   render() {
-    const { photos, isLoading } = this.state;
+    const { photos, isLoading, showModal, url, alt } = this.state;
     const { loadMore } = this.props;
     return (
       <div>
         {isLoading && <Loader />}
         {!isLoading && (
           <ul className="ImageGallery">
-            <ImageGalleryItem photos={photos} openModal={this.openModal} />
+            <ImageGalleryItem photos={photos} onClick={this.toggleModal} />
           </ul>
         )}
         {photos.length >= 1 && <Button onClick={loadMore} />}
-        {/* <Modal /> */}
+        {showModal && (
+          <Modal>
+            <div>Here must be a picture</div>
+            <img src={url} alt={alt} />
+          </Modal>
+        )}
       </div>
     );
   }
 }
-
-// export const ImageGallery = () => {
-//   return (
-//     <ul class="gallery">
-//       Набір із зображеннями
-//       {/* <!-- Набір <li> із зображеннями --> */}
-//     </ul>
-//   );
-// };
