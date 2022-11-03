@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import { toast } from 'react-toastify';
-
-// import '../../css/styles.css';
+import PropTypes from 'prop-types';
 
 export class Searchbar extends Component {
   state = {
@@ -19,7 +18,7 @@ export class Searchbar extends Component {
   };
 
   handleSubmit = evt => {
-    const { searchPhotos, photos, page } = this.state;
+    const { searchPhotos, page } = this.state;
     evt.preventDefault();
 
     if (searchPhotos.trim() === '') {
@@ -33,13 +32,6 @@ export class Searchbar extends Component {
     //   this.state.per_page
     // );
     console.log('handleSubmit... searchPhotos, ', this.state.searchPhotos);
-
-    // try {
-    //   this.feachPhotos();
-    // } catch (error) {
-    //   toast.error(error);
-    //   // Notify.failure(error);
-    // }
 
     this.reset({ searchPhotos, page });
     // this.setState({ searchPhotos: '' });
@@ -61,8 +53,8 @@ export class Searchbar extends Component {
             className="SearchForm-input"
             type="text"
             value={this.state.searchPhotos}
-            autocomplete="off"
-            autofocus
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
             onChange={this.handleChange}
           />
@@ -72,24 +64,9 @@ export class Searchbar extends Component {
   }
 }
 
-// export const Searchbar = ({ handleChange, handleSubmit }) => {
-//   return (
-//     <header class="searchbar">
-//       <form class="form" onSubmit={this.handleSubmit}>
-//         <button type="submit" class="button">
-//           <span class="button-label">Search</span>
-//         </button>
-
-//         <input
-//           class="input"
-//           type="text"
-//           value={this.state.searchPhotos}
-//           autocomplete="off"
-//           autofocus
-//           placeholder="Search images and photos"
-//           onChange={this.handleChange}
-//         />
-//       </form>
-//     </header>
-//   );
-// };
+Searchbar.propTypes = {
+  state: PropTypes.shape({
+    searchPhotos: PropTypes.string.isRequired,
+    page: PropTypes.number.isRequired,
+  }).isRequired,
+};

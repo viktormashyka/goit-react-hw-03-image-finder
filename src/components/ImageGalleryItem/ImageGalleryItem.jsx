@@ -12,7 +12,7 @@ export const ImageGalleryItem = ({ photos, onClick }) => {
           alt={tags}
           title={tags}
           loading="lazy"
-          onClick={onClick({ largeImageURL, tags })}
+          //   onClick={onClick({ largeImageURL, tags })}
         />
       </a>
     </li>

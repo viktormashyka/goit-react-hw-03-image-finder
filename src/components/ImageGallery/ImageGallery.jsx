@@ -1,30 +1,14 @@
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+
 // import * as basicLightbox from 'basiclightbox';
 
 import { fetchPhotos } from 'api';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
-import { Modal } from 'components/Modal/Modal';
-
-// const instance = basicLightbox.create(`
-//     <img src="assets/images/image.png" width="800" height="600">
-// `);
-
-// const instance = basicLightbox.create(`
-//     <div class="modal">
-//         <p>
-//             Your first lightbox with just a few lines of code.
-//             Yes, it's really that simple.
-//         </p>
-//     </div>
-// `);
-
-// var lightbox = new SimpleLightbox('.gallery a', {
-//   captionPosition: 'bottom',
-//   captionDelay: 250,
-// });
+import Modal from 'components/Modal/Modal';
 
 export class ImageGallery extends Component {
   state = {
@@ -90,46 +74,69 @@ export class ImageGallery extends Component {
         this.setState({ isLoading: false });
       }
     }
+    // if (prevState.showModal !== this.state.showModal) {
+    //   this.state.showModal ? this.openModal : this.closeModal;
+    // }
   }
 
-  toggleModal = (evt, { largeImageURL, tags }) => {
-    evt.preventDefault();
+  toggleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
     console.log('toggleModal...');
-    this.openModal(evt, { largeImageURL, tags });
   };
 
-  openModal = (evt, { largeImageURL, tags }) => {
-    if (evt.target === 'IMG') {
-      this.setState(({ largeImageURL, tags }) => ({
-        url: largeImageURL,
-        alt: tags,
-      }));
-    }
-    console.log('largeImageURL, tags', this.state.url, this.state.alt);
-  };
+  // openModal = (evt, { largeImageURL, tags }) => {
+  //   if (evt.target === 'IMG') {
+  //     this.setState(({ url, alt }) => ({
+  //       url: largeImageURL,
+  //       alt: tags,
+  //     }));
+  //   }
+  //   console.log('largeImageURL, tags', this.state.url, this.state.alt);
+  // };
+
+  // closeModal = evt => {
+  //   this.setState(({ url, alt }) => ({
+  //     url: '',
+  //     alt: '',
+  //   }));
+  //   console.log('largeImageURL, tags', this.state.url, this.state.alt);
+  // };
 
   render() {
     const { photos, isLoading, showModal, url, alt } = this.state;
     const { loadMore } = this.props;
+    //   const { url, alt } = this.props;
     return (
       <div>
         {isLoading && <Loader />}
         {!isLoading && (
           <ul className="ImageGallery">
-            <ImageGalleryItem photos={photos} onClick={this.toggleModal} />
+            <ImageGalleryItem photos={photos} />
           </ul>
         )}
         {photos.length >= 1 && <Button onClick={loadMore} />}
         {showModal && (
-          <Modal>
-            <div>Here must be a picture</div>
-            <img src={url} alt={alt} />
+          <Modal onClose={this.toggleModal}>
+            Here must be a picture
+            {/* <div width="40" height="40" fill="#ab1919">
+              Here must be a picture
+            </div> */}
+            {/* <img src={url} alt={alt} /> */}
           </Modal>
         )}
       </div>
     );
   }
 }
+
+ImageGallery.propTypes = {
+  state: PropTypes.shape({
+    photos: PropTypes.array.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    showModal: PropTypes.bool.isRequired,
+    url: PropTypes.string.isRequired,
+    alt: PropTypes.string.isRequired,
+  }).isRequired,
+};

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import PropTypes from 'prop-types';
+
 import ImageFinder from '../components/ImageFinder/ImageFinder';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -45,21 +47,9 @@ export class App extends Component {
   }
 }
 
-// export const App = () => {
-//   return (
-//     <div>
-//       <ImageFinder onSubmit={values => console.log('values, ', values)} />
-//     </div>
-//   );
-// };
-
-//   style={{
-//     height: '100vh',
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     fontSize: 40,
-//     color: '#010101'
-//   }}
-// >
-//   React homework template
+App.propTypes = {
+  state: PropTypes.shape({
+    searchPhotos: PropTypes.string.isRequired,
+    page: PropTypes.number.isRequired,
+  }).isRequired,
+};
