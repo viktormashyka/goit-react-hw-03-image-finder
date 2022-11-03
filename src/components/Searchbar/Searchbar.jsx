@@ -26,7 +26,7 @@ export class Searchbar extends Component {
     }
     this.props.onSubmit({ ...this.state });
     // this.props.onSubmit(
-    //   //   this.state.photos,
+    //   this.state.photos,
     //   this.state.searchPhotos,
     //   this.state.page,
     //   this.state.per_page
