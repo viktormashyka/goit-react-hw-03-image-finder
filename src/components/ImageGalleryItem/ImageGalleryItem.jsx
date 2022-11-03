@@ -2,7 +2,7 @@ import * as basicLightbox from 'basiclightbox';
 
 import { Modal } from 'components/Modal/Modal';
 
-export const ImageGalleryItem = ({ photos, toggleModal }) => {
+export const ImageGalleryItem = ({ photos, onClick }) => {
   return photos.map(({ id, largeImageURL, webformatURL, tags }) => (
     <li className="ImageGalleryItem" key={id}>
       <a className="gallery__item" href={largeImageURL}>
@@ -12,7 +12,7 @@ export const ImageGalleryItem = ({ photos, toggleModal }) => {
           alt={tags}
           title={tags}
           loading="lazy"
-          onClick={() => toggleModal(largeImageURL, tags)}
+          onClick={onClick({ largeImageURL, tags })}
         />
       </a>
     </li>
