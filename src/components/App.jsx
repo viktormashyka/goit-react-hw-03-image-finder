@@ -73,7 +73,7 @@ export class App extends Component {
         //   );
         // }
       } catch (error) {
-        toast.error(error);
+        toast.error('error');
       } finally {
         this.setState({ isLoading: false });
       }
