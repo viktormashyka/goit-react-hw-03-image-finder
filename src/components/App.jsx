@@ -122,7 +122,6 @@ export class App extends Component {
     const { loadMore } = this;
     return (
       <div className="App">
-        {/* <ImageFinder onSubmit={this.handleFormSubmit} /> */}
         <Searchbar onSubmit={this.handleFormSubmit} />
         {isLoading && <Loader />}
         {!isLoading && (
