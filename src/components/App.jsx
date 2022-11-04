@@ -51,11 +51,12 @@ export class App extends Component {
       try {
         this.setState({ isLoading: true });
         const resultApi = await fetchPhotos({ searchPhotos, page });
+
         // this.setState({ photos });
-        // this.setState({ photos: resultApi });
-        this.setState(prevState => ({
-          photos: [...prevState.photos, ...resultApi],
-        }));
+        this.setState({ photos: resultApi });
+        // this.setState(prevState => ({
+        //   photos: [...prevState.photos, ...resultApi],
+        // }));
         if (photos.length === 0) {
           toast.info(
             'Sorry, there are no images matching your search query. Please try again.'
@@ -114,7 +115,7 @@ export class App extends Component {
   // };
 
   render() {
-    const { searchPhotos, page, photos, isLoading, showModal } = this.state;
+    const { photos, isLoading } = this.state;
     const { loadMore } = this;
     return (
       <div className="App">
