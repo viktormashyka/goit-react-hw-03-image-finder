@@ -1,5 +1,3 @@
-// import * as basicLightbox from 'basiclightbox';
-
 import React, { Component } from 'react';
 
 import Modal from 'components/Modal/Modal';

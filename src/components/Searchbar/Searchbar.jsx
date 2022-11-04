@@ -17,7 +17,8 @@ export class Searchbar extends Component {
     evt.preventDefault();
 
     if (searchPhotos.trim() === '') {
-      return toast.info('Input search name please ...');
+      return console.log('Input search name please ...');
+      // toast.info('Input search name please ...');
     }
     this.props.onSubmit({ ...this.state });
     // this.props.onSubmit(
