@@ -4,13 +4,8 @@ import PropTypes from 'prop-types';
 
 export class Searchbar extends Component {
   state = {
-    // photos: [],
     searchPhotos: '',
     page: 1,
-    // per_page: 12,
-    // images: 0,
-    // largeImageURL: '',
-    // tags: '',
   };
 
   handleChange = evt => {
