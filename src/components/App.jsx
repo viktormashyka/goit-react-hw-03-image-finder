@@ -9,16 +9,13 @@ import { Button } from './Button/Button';
 import { fetchPhotos } from 'api';
 import { Loader } from './Loader/Loader';
 import '../css/styles.css';
-import Modal from './Modal/Modal';
 
 export class App extends Component {
   state = {
     photos: [],
     searchPhotos: '',
     page: 1,
-    // per_page: 12,
     isLoading: false,
-    // showModal: false,
   };
 
   //   async componentDidMount() {
@@ -134,8 +131,6 @@ export class App extends Component {
           />
         )}
         {photos.length >= 1 && <Button onClick={loadMore} />}
-        {/* <Button onClick={this.loadMore} /> */}
-
         <ToastContainer autoClose={2000} />
       </div>
     );
