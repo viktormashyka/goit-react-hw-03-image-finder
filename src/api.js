@@ -12,7 +12,7 @@ export const fetchPhotos = async ({ searchPhotos, page }) => {
 
   if (response.status !== 200) {
     throw new Error(response.status);
-    toast.error(Error);
+    toast.error('Error');
   }
 
   // const api = { fetchPhotos };
