@@ -12,11 +12,11 @@ import Modal from 'components/Modal/Modal';
 
 export class ImageGallery extends Component {
   state = {
-    photos: [],
-    isLoading: false,
-    showModal: false,
-    url: '',
-    alt: '',
+    // photos: [],
+    // isLoading: false,
+    // showModal: false,
+    // url: '',
+    // alt: '',
   };
 
   //   async componentDidMount() {
@@ -42,49 +42,49 @@ export class ImageGallery extends Component {
   //     }
   //   }
 
-  async componentDidUpdate(prevProps, prevState) {
-    const { searchPhotos, page } = this.props;
-    if (
-      prevProps.page !== this.props.page ||
-      prevProps.searchPhotos !== this.props.searchPhotos
-    ) {
-      console.log('componentDidUpdate... ');
-      try {
-        this.setState({ isLoading: true });
-        const photos = await fetchPhotos({ searchPhotos, page });
-        this.setState({ photos });
-        if (photos.length === 0) {
-          toast.info(
-            'Sorry, there are no images matching your search query. Please try again.'
-          );
-        }
-        console.log('componentDidUpdate...');
-        console.log('this.state, ', this.state);
-        console.log('this.props, ', this.props);
-        // images = Math.ceil((page * per_page) / result.totalHits);
-        // images = (page * per_page) / result.totalHits;
-        // if (images >= 1) {
-        //   Notify.info(
-        //     "We're sorry, but you've reached the end of search results."
-        //   );
-        // }
-      } catch (error) {
-        toast.error(error);
-      } finally {
-        this.setState({ isLoading: false });
-      }
-    }
-    // if (prevState.showModal !== this.state.showModal) {
-    //   this.state.showModal ? this.openModal : this.closeModal;
-    // }
-  }
+  // async componentDidUpdate(prevProps, prevState) {
+  //   const { searchPhotos, page } = this.props;
+  //   if (
+  //     prevProps.page !== this.props.page ||
+  //     prevProps.searchPhotos !== this.props.searchPhotos
+  //   ) {
+  //     console.log('componentDidUpdate... ');
+  //     try {
+  //       this.setState({ isLoading: true });
+  //       const photos = await fetchPhotos({ searchPhotos, page });
+  //       this.setState({ photos });
+  //       if (photos.length === 0) {
+  //         toast.info(
+  //           'Sorry, there are no images matching your search query. Please try again.'
+  //         );
+  //       }
+  //       console.log('componentDidUpdate...');
+  //       console.log('this.state, ', this.state);
+  //       console.log('this.props, ', this.props);
+  //       // images = Math.ceil((page * per_page) / result.totalHits);
+  //       // images = (page * per_page) / result.totalHits;
+  //       // if (images >= 1) {
+  //       //   Notify.info(
+  //       //     "We're sorry, but you've reached the end of search results."
+  //       //   );
+  //       // }
+  //     } catch (error) {
+  //       toast.error(error);
+  //     } finally {
+  //       this.setState({ isLoading: false });
+  //     }
+  //   }
+  //   // if (prevState.showModal !== this.state.showModal) {
+  //   //   this.state.showModal ? this.openModal : this.closeModal;
+  //   // }
+  // }
 
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }));
-    console.log('toggleModal...');
-  };
+  // toggleModal = () => {
+  //   this.setState(({ showModal }) => ({
+  //     showModal: !showModal,
+  //   }));
+  //   console.log('toggleModal...');
+  // };
 
   // openModal = (evt, { largeImageURL, tags }) => {
   //   if (evt.target === 'IMG') {
@@ -105,27 +105,19 @@ export class ImageGallery extends Component {
   // };
 
   render() {
-    const { photos, isLoading, showModal, url, alt } = this.state;
-    const { loadMore } = this.props;
+    // const { photos, isLoading, showModal, url, alt } = this.state;
+    // const { loadMore } = this.props;
+    const { photos } = this.props;
     //   const { url, alt } = this.props;
     return (
       <div>
-        {isLoading && <Loader />}
-        {!isLoading && (
-          <ul className="ImageGallery">
-            <ImageGalleryItem photos={photos} />
-          </ul>
-        )}
-        {photos.length >= 1 && <Button onClick={loadMore} />}
-        {showModal && (
-          <Modal onClose={this.toggleModal}>
-            Here must be a picture
-            {/* <div width="40" height="40" fill="#ab1919">
-              Here must be a picture
-            </div> */}
-            {/* <img src={url} alt={alt} /> */}
-          </Modal>
-        )}
+        {/* {isLoading && <Loader />} */}
+
+        <ul className="ImageGallery">
+          <ImageGalleryItem photos={photos} />
+        </ul>
+
+        {/* {photos.length >= 1 && <Button onClick={loadMore} />} */}
       </div>
     );
   }
