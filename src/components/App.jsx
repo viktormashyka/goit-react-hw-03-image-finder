@@ -136,7 +136,7 @@ export class App extends Component {
           />
         )}
         {photos.length >= 1 && <Button onClick={loadMore} />}
-        <ToastContainer autoClose={2000} />
+        {/* <ToastContainer autoClose={2000} /> */}
       </div>
     );
   }
