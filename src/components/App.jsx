@@ -58,7 +58,10 @@ export class App extends Component {
           photos: [...prevState.photos, ...resultApi],
         }));
         if (photos.length === 0) {
-          toast.info(
+          // toast.info(
+          //   'Sorry, there are no images matching your search query. Please try again.'
+          // );
+          console.log(
             'Sorry, there are no images matching your search query. Please try again.'
           );
         }

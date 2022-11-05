@@ -16,13 +16,5 @@ export const fetchPhotos = async ({ searchPhotos, page }) => {
     console.log(error);
   }
 
-  // const api = { fetchPhotos };
-
-  // return api;
-
   return response.data.hits;
 };
-
-// const api = { fetchPhotos };
-
-// export default api;
