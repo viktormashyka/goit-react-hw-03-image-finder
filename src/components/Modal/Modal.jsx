@@ -26,7 +26,7 @@ export default class Modal extends Component {
     }
   };
 
-  redner() {
+  render() {
     return createPortal(
       <div className="Overlay" onClick={this.handleBackdropClickClose}>
         <div className="Modal">{this.props.children}</div>
