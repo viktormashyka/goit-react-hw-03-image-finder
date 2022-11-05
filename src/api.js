@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 
 export const fetchPhotos = async ({ searchPhotos, page }) => {
   //   const searchPhotos = 'cat';
@@ -13,7 +13,7 @@ export const fetchPhotos = async ({ searchPhotos, page }) => {
   if (response.status !== 200) {
     throw new Error(response.status);
     // toast.error('Error');
-    console.log(error);
+    // console.error;
   }
 
   return response.data.hits;
