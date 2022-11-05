@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 export class Searchbar extends Component {
   state = {
     searchPhotos: '',
-    // page: 1,
   };
 
   handleChange = evt => {
@@ -37,9 +36,11 @@ export class Searchbar extends Component {
   };
 
   render() {
+    const { searchPhotos } = this.state;
+    const { handleSubmit, handleChange } = this;
     return (
       <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.handleSubmit}>
+        <form className="SearchForm" onSubmit={handleSubmit}>
           <button type="submit" className="SearchForm-button">
             <span className="SearchForm-button-label">Search</span>
           </button>
@@ -47,11 +48,11 @@ export class Searchbar extends Component {
           <input
             className="SearchForm-input"
             type="text"
-            value={this.state.searchPhotos}
+            value={searchPhotos}
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            onChange={this.handleChange}
+            onChange={handleChange}
           />
         </form>
       </header>
@@ -62,6 +63,5 @@ export class Searchbar extends Component {
 Searchbar.propTypes = {
   state: PropTypes.shape({
     searchPhotos: PropTypes.string.isRequired,
-    page: PropTypes.number.isRequired,
   }).isRequired,
 };

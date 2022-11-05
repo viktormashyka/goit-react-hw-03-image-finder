@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Modal from 'components/Modal/Modal';
 
@@ -14,35 +15,11 @@ export class ImageGalleryItem extends Component {
     console.log('toggleModal...');
   };
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.showModal) {
-  //     this.openModal();
-  //   } else {
-  //     this.closeModal();
-  //   }
-  // }
-
-  // openModal = (evt, { largeImageURL, tags }) => {
-  //   if (evt.target === 'IMG') {
-  //     this.setState(({ url, alt }) => ({
-  //       url: largeImageURL,
-  //       alt: tags,
-  //     }));
-  //   }
-  //   console.log('largeImageURL, tags', this.state.url, this.state.alt);
-  // };
-
-  // closeModal = evt => {
-  //   this.setState(({ url, alt }) => ({
-  //     url: '',
-  //     alt: '',
-  //   }));
-  //   console.log('largeImageURL, tags', this.state.url, this.state.alt);
-  // };
-
   render() {
-    const { photos } = this.props;
     const { showModal } = this.state;
+    const { photos } = this.props;
+    const { toggleModal } = this;
+
     return photos.map(({ id, largeImageURL, webformatURL, tags }) => (
       <li className="ImageGalleryItem" key={id}>
         <img
@@ -51,10 +28,10 @@ export class ImageGalleryItem extends Component {
           alt={tags}
           title={tags}
           loading="lazy"
-          onClick={this.toggleModal}
+          onClick={toggleModal}
         />
         {showModal && (
-          <Modal onClose={this.toggleModal}>
+          <Modal onClose={toggleModal}>
             <img src={largeImageURL} alt={tags} />
           </Modal>
         )}
@@ -63,27 +40,6 @@ export class ImageGalleryItem extends Component {
   }
 }
 
-//   render() {
-//     const { photos } = this.props;
-//     const { showModal } = this.state;
-//     return photos.map(({ id, largeImageURL, webformatURL, tags }) => (
-//       <li className="ImageGalleryItem" key={id}>
-//         <a className="gallery__item" href={largeImageURL}>
-//           <img
-//             className="ImageGalleryItem-image"
-//             src={webformatURL}
-//             alt={tags}
-//             title={tags}
-//             loading="lazy"
-//             onClick={this.toggleModal}
-//           />
-//           {showModal && (
-//             <Modal onClose={this.toggleModal}>
-//               <img src={largeImageURL} alt={tags} />
-//             </Modal>
-//           )}
-//         </a>
-//       </li>
-//     ));
-//   }
-// }
+ImageGalleryItem.propTypes = {
+  state: PropTypes.shape({ showModal: PropTypes.bool.isRequired }).isRequired,
+};

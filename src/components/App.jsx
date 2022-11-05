@@ -19,29 +19,6 @@ export class App extends Component {
     pages: 0,
   };
 
-  //   async componentDidMount() {
-  //     const { searchPhotos, page, per_page } = this.props;
-  //     try {
-  //       this.setState({ isLoading: true });
-  //       const photos = await fetchPhotos({ searchPhotos, page, per_page });
-  //       this.setState({ photos });
-  //       console.log('componentDidMount...');
-  //       console.log('this.state, ', this.state);
-  //       console.log('this.props, ', this.props);
-  //       // images = Math.ceil((page * per_page) / result.totalHits);
-  //       // images = (page * per_page) / result.totalHits;
-  //       // if (images >= 1) {
-  //       //   Notify.info(
-  //       //     "We're sorry, but you've reached the end of search results."
-  //       //   );
-  //       // }
-  //     } catch (error) {
-  //       toast.error(error);
-  //     } finally {
-  //       this.setState({ isLoading: false });
-  //     }
-  //   }
-
   async componentDidUpdate(prevProps, prevState) {
     const { searchPhotos, page } = this.state;
     if (
@@ -51,15 +28,9 @@ export class App extends Component {
       console.log('componentDidUpdate... ');
       try {
         this.setState({ isLoading: true });
-        // const resultApi = await fetchPhotos({ searchPhotos, page });
+
         const { images, pages } = await fetchPhotos({ searchPhotos, page });
 
-        // this.setState({ photos });
-        // this.setState({ photos: resultApi });
-
-        // this.setState(prevState => ({
-        //   photos: [...prevState.photos, ...resultApi],
-        // }));
         if (images.length === 0) {
           toast.info(
             'Sorry, there are no images matching your search query. Please try again.'
@@ -74,17 +45,6 @@ export class App extends Component {
         this.setState(prevState => ({
           photos: [...prevState.photos, ...images],
         }));
-
-        console.log('componentDidUpdate...');
-        console.log('this.state, ', this.state);
-        console.log('this.props, ', this.props);
-        // images = Math.ceil((page * per_page) / result.totalHits);
-        // images = (page * per_page) / result.totalHits;
-        // if (images >= 1) {
-        //   Notify.info(
-        //     "We're sorry, but you've reached the end of search results."
-        //   );
-        // }
       } catch (error) {
         console.log(error);
       } finally {
@@ -102,50 +62,14 @@ export class App extends Component {
     console.log('this.state, ', this.state);
   };
 
-  // toggleModal = () => {
-  //   this.setState(({ showModal }) => ({
-  //     showModal: !showModal,
-  //   }));
-  //   console.log('toggleModal...');
-  // };
-
-  // openModal = (evt, { largeImageURL, tags }) => {
-  //   if (evt.target === 'IMG') {
-  //     this.setState(({ url, alt }) => ({
-  //       url: largeImageURL,
-  //       alt: tags,
-  //     }));
-  //   }
-  //   console.log('largeImageURL, tags', this.state.url, this.state.alt);
-  // };
-
-  // closeModal = evt => {
-  //   this.setState(({ url, alt }) => ({
-  //     url: '',
-  //     alt: '',
-  //   }));
-  //   console.log('largeImageURL, tags', this.state.url, this.state.alt);
-  // };
-
   render() {
     const { photos, isLoading, pages, page } = this.state;
-    const { loadMore } = this;
+    const { loadMore, handleFormSubmit } = this;
     return (
       <div className="App">
-        <Searchbar onSubmit={this.handleFormSubmit} />
+        <Searchbar onSubmit={handleFormSubmit} />
         {isLoading && <Loader />}
-        {photos.length > 0 && (
-          <ImageGallery
-            // searchPhotos={searchPhotos}
-            // page={page}
-            // loadMore={this.loadMore}
-            photos={photos}
-            // per_page={per_page}
-            // photos={this.state.photos}
-          />
-        )}
-        {/* {photos.length >= 1 && !isLoading && <Button onClick={loadMore} />}
-         */}
+        {photos.length > 0 && <ImageGallery photos={photos} />}
         {!!pages && pages !== page && !isLoading && (
           <Button onClick={loadMore} />
         )}
@@ -157,7 +81,10 @@ export class App extends Component {
 
 App.propTypes = {
   state: PropTypes.shape({
+    photos: PropTypes.array.isRequired,
     searchPhotos: PropTypes.string.isRequired,
     page: PropTypes.number.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    pages: PropTypes.number.isRequired,
   }).isRequired,
 };
