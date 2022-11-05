@@ -1,11 +1,11 @@
 import { Component } from 'react';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 export class Searchbar extends Component {
   state = {
     searchPhotos: '',
-    page: 1,
+    // page: 1,
   };
 
   handleChange = evt => {
@@ -13,12 +13,11 @@ export class Searchbar extends Component {
   };
 
   handleSubmit = evt => {
-    const { searchPhotos, page } = this.state;
+    const { searchPhotos } = this.state;
     evt.preventDefault();
 
     if (searchPhotos.trim() === '') {
-      return console.log('Input search name please ...');
-      // toast.info('Input search name please ...');
+      return toast.info('Input search name please ...');
     }
     this.props.onSubmit({ ...this.state });
     // this.props.onSubmit(
@@ -29,12 +28,12 @@ export class Searchbar extends Component {
     // );
     console.log('handleSubmit... searchPhotos, ', this.state.searchPhotos);
 
-    this.reset({ searchPhotos, page });
+    this.reset({ searchPhotos });
     // this.setState({ searchPhotos: '' });
   };
 
   reset = () => {
-    this.setState({ searchPhotos: '', page: 1 });
+    this.setState({ searchPhotos: '' });
   };
 
   render() {

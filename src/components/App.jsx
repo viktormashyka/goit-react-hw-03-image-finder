@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import PropTypes from 'prop-types';
 
@@ -16,6 +16,7 @@ export class App extends Component {
     searchPhotos: '',
     page: 1,
     isLoading: false,
+    pages: 0,
   };
 
   //   async componentDidMount() {
@@ -50,21 +51,30 @@ export class App extends Component {
       console.log('componentDidUpdate... ');
       try {
         this.setState({ isLoading: true });
-        const resultApi = await fetchPhotos({ searchPhotos, page });
+        // const resultApi = await fetchPhotos({ searchPhotos, page });
+        const { images, pages } = await fetchPhotos({ searchPhotos, page });
 
         // this.setState({ photos });
         // this.setState({ photos: resultApi });
-        this.setState(prevState => ({
-          photos: [...prevState.photos, ...resultApi],
-        }));
-        if (photos.length === 0) {
-          // toast.info(
-          //   'Sorry, there are no images matching your search query. Please try again.'
-          // );
-          console.log(
+
+        // this.setState(prevState => ({
+        //   photos: [...prevState.photos, ...resultApi],
+        // }));
+        if (images.length === 0) {
+          toast.info(
             'Sorry, there are no images matching your search query. Please try again.'
           );
+          return;
         }
+
+        if (page === 1) {
+          this.setState({ pages: pages });
+        }
+
+        this.setState(prevState => ({
+          photos: [...prevState.photos, ...images],
+        }));
+
         console.log('componentDidUpdate...');
         console.log('this.state, ', this.state);
         console.log('this.props, ', this.props);
@@ -76,7 +86,6 @@ export class App extends Component {
         //   );
         // }
       } catch (error) {
-        // toast.error('error');
         console.log(error);
       } finally {
         this.setState({ isLoading: false });
@@ -85,7 +94,7 @@ export class App extends Component {
   }
 
   handleFormSubmit = ({ searchPhotos, page }) => {
-    this.setState({ searchPhotos, page });
+    this.setState({ searchPhotos, page: 1, photos: [] });
   };
 
   loadMore = evt => {
@@ -119,13 +128,13 @@ export class App extends Component {
   // };
 
   render() {
-    const { photos, isLoading } = this.state;
+    const { photos, isLoading, pages, page } = this.state;
     const { loadMore } = this;
     return (
       <div className="App">
         <Searchbar onSubmit={this.handleFormSubmit} />
         {isLoading && <Loader />}
-        {!isLoading && (
+        {photos.length > 0 && (
           <ImageGallery
             // searchPhotos={searchPhotos}
             // page={page}
@@ -135,8 +144,12 @@ export class App extends Component {
             // photos={this.state.photos}
           />
         )}
-        {photos.length >= 1 && <Button onClick={loadMore} />}
-        {/* <ToastContainer autoClose={2000} /> */}
+        {/* {photos.length >= 1 && !isLoading && <Button onClick={loadMore} />}
+         */}
+        {!!pages && pages !== page && !isLoading && (
+          <Button onClick={loadMore} />
+        )}
+        <ToastContainer autoClose={2000} />
       </div>
     );
   }
