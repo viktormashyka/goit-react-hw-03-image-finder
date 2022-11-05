@@ -43,7 +43,7 @@ export class App extends Component {
   //   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { searchPhotos, page, photos } = this.state;
+    const { searchPhotos, page } = this.state;
     if (
       prevState.page !== this.state.page ||
       prevState.searchPhotos !== this.state.searchPhotos
